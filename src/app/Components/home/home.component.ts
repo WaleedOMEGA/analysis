@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DataService } from './../../Services/data.service';
 import { DataModel } from './../../Models/data.model';
 import * as Highcharts from 'highcharts';
+import { Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'app-home',
@@ -17,61 +18,124 @@ export class HomeComponent implements OnInit {
   filter: FormGroup = new FormGroup({});
   loading: boolean = true;
   filteredData = [];
-  Highcharts: typeof Highcharts = Highcharts;
+  chart: Chart=new Chart;
+  addPoint() {
+    if (this.chart) {
+      this.chart.addPoint(Math.floor(Math.random() * 10));
+    } else {
+      alert('init chart, first!');
+    }
+  }
 
-  chartOptions: Highcharts.Options = {
-    chart: {
-      renderTo: 'container',
-      marginLeft: 100,
-      //  plotAreaWidth: 50,
-      //   plotAreaHeight: 450,
-    },
+  addSerie() {
+    this.chart.addSeries({
+      name: 'Line ' + Math.floor(Math.random() * 10),
+      type: 'line',
+      data: [
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+      ],
+    },false,false);
+  }
 
-    title: {
-      text: 'Bar series - data sorting',
-    },
+  removePoint() {
+    this.chart.removePoint(this.chart.ref.series[0].data.length - 1);
+  }
 
-    yAxis: {
-      title: {
-        text: '',
-      },
-    },
+  removeSerie() {
+    this.chart.removeSeries(this.chart.ref.series.length - 1);
+  }
 
-    xAxis: {
-      type: 'category',
-      min: 0,
-      labels: {
-        // animate: false
-      },
-    },
-
-    legend: {
-      enabled: false,
-    },
-
-    series: [
-      {
+  init() {
+    let chart = new Chart({
+      chart: {
         type: 'line',
-        zoneAxis: 'x',
-        zones: [
-          {
-            value: 2,
-            color: 'red',
-          },
-        ],
-        dataLabels: {
-          enabled: true,
-          format: '{y:,.2f}',
-        },
-        data: [
-          ['hello', 1],
-          ['heddllo', 5],
-          ['heldsalo', 2],
-          ['heldsadsalo', 4],
-        ],
       },
-    ],
-  };
+      title: {
+        text: 'Linechart',
+      },
+      credits: {
+        enabled: false,
+      },
+      series: [
+        {
+          name: 'Line 1',
+          type: 'line',
+          data: [1, 2, 3],
+        },
+      ],
+    });
+    chart.addPoint(4);
+    this.chart = chart;
+    chart.addPoint(5);
+    setTimeout(() => {
+      chart.addPoint(6);
+    }, 2000);
+
+    chart.ref$.subscribe(console.log);
+  }
+  // Highcharts: typeof Highcharts = Highcharts;
+
+  // chartOptions: Highcharts.Options = {
+  //   chart: {
+  //     renderTo: 'container',
+  //     marginLeft: 100,
+  //     //  plotAreaWidth: 50,
+  //     //   plotAreaHeight: 450,
+  //   },
+
+  //   title: {
+  //     text: 'Bar series - data sorting',
+  //   },
+
+  //   yAxis: {
+  //     title: {
+  //       text: '',
+  //     },
+  //   },
+
+  //   xAxis: {
+  //     type: 'category',
+  //     min: 0,
+  //     labels: {
+  //       // animate: false
+  //     },
+  //   },
+
+  //   legend: {
+  //     enabled: false,
+  //   },
+
+  //   series: [
+  //     {
+  //       type: 'line',
+  //       zoneAxis: 'x',
+  //       zones: [
+  //         {
+  //           value: 2,
+  //           color: 'red',
+  //         },
+  //       ],
+  //       dataLabels: {
+  //         enabled: true,
+  //         format: '{y:,.2f}',
+  //       },
+  //       data: [
+  //         ['hello', 1],
+  //         ['heddllo', 5],
+  //         ['heldsalo', 2],
+  //         ['heldsadsalo', 4],
+  //       ],
+  //     },
+  //   ],
+  // };
   constructor(private data: DataService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -81,7 +145,6 @@ export class HomeComponent implements OnInit {
       camp: [''],
       school: [''],
     });
-
   }
   getAllData() {
     this.data.getData().subscribe({
@@ -129,7 +192,7 @@ export class HomeComponent implements OnInit {
     console.log(this.filteredData);
   }
   public initChart() {
-      Highcharts.chart('container', this.chartOptions);
+    // Highcharts.chart('container', this.chartOptions);
     // let chart = new Highcharts.Chart({
     //   chart: {
     //     type: 'line',

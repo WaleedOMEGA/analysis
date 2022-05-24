@@ -38,12 +38,18 @@
 </mat-form-field>
 </form>
 <!-- <highcharts-chart style="display: block;" [Highcharts]="Highcharts" [options]="caseChart"></highcharts-chart> -->
-<figure class="highcharts-figure">
+<!-- <figure class="highcharts-figure">
   <div id="container"></div>
   <p class="highcharts-description">
     Chart showing data loaded dynamically. The individual data points can
     be clicked to display more information.
   </p>
-</figure>
+</figure> -->
+<button (click)="init()">Init</button>
+<button (click)="addSerie()">Add Serie</button>
+<button (click)="removeSerie()">Remove Serie</button>
+<button (click)="addPoint()">Add Point</button>
+<button (click)="removePoint()">Remove Point</button>
+<div [chart]="chart"></div>
 </div>
 
