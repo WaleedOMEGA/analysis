@@ -1,0 +1,49 @@
+<div *ngIf="loading" class="container" style="justify-content: center;align-items: center;">
+<mat-spinner  [diameter]="400"></mat-spinner>
+</div>
+
+
+
+
+
+<div *ngIf="!loading" class="container">
+<h1 class="text-center">Analysis Chart</h1>
+<h2 class="text-center">Number of Lessons</h2>
+<form class="row" [formGroup]="filter">
+<mat-form-field class="col-4">
+  <mat-label>Select Country</mat-label>
+  <mat-select formControlName="country" (ngModelChange)="changeFilter()">
+    <mat-option  *ngFor="let country of ListOfCountries" [value]="country">
+      {{country}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field class="col-4">
+  <mat-label>Select Camp</mat-label>
+  <mat-select formControlName="camp" (ngModelChange)="changeFilter()">
+    <mat-option *ngFor="let camp of ListOfCamp" [value]="camp">
+      {{camp}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field class="col-4">
+  <mat-label>Select School</mat-label>
+  <mat-select formControlName="school" (ngModelChange)="changeFilter()">
+    <mat-option [value]="">
+      Show All</mat-option>
+    <mat-option *ngFor="let school of ListOfSchool" [value]="school">
+      {{school}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+</form>
+<!-- <highcharts-chart style="display: block;" [Highcharts]="Highcharts" [options]="caseChart"></highcharts-chart> -->
+<figure class="highcharts-figure">
+  <div id="container"></div>
+  <p class="highcharts-description">
+    Chart showing data loaded dynamically. The individual data points can
+    be clicked to display more information.
+  </p>
+</figure>
+</div>
+
