@@ -20,31 +20,23 @@ export class HomeComponent implements OnInit {
   filteredData = [];
   chart: Chart = new Chart();
   chartData = [];
-  addPoint() {
-    // if (this.chart) {
-    //   this.chart.addPoint(Math.floor(Math.random() * 10));
-    // } else {
-    //   alert('init chart, first!');
-    // }
-  }
+
 
   addSerie(name: string, data: (string | number)[][]) {
-    console.log(name,data)
+    // console.log(name,data)
     this.chart.addSeries(
       {
         name,
         type: 'line',
         data,
-      color: 'red'
+      // color: 'red'
       },
-      false,
-      false
+      true,
+      true
     );
   }
 
-  removePoint(point:number) {
-    this.chart.removePoint(point);
-  }
+
 
   removeSerie() {
     this.chart.removeSeries(this.chart.ref.series.length - 1);
@@ -82,7 +74,15 @@ export class HomeComponent implements OnInit {
           'Jan',
           'Feb',
           'Mar',
-
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
         ],
         title: {
           text: 'Months',
@@ -107,77 +107,16 @@ export class HomeComponent implements OnInit {
         },
       },
       title: {
-        text: 'Linechart',
+        text: 'Analysis Chart',
       },
       credits: {
         enabled: false,
       },
       series: [],
     });
-    // chart.addPoint(4);
-    this.chart = chart;
-    // chart.addPoint(5);
-    setTimeout(() => {
-      // chart.addPoint(6);
-    }, 2000);
-
-    chart.ref$.subscribe(console.log);
+    // chart.ref$.subscribe(console.log);
   }
-  // Highcharts: typeof Highcharts = Highcharts;
 
-  // chartOptions: Highcharts.Options = {
-  //   chart: {
-  //     renderTo: 'container',
-  //     marginLeft: 100,
-  //     //  plotAreaWidth: 50,
-  //     //   plotAreaHeight: 450,
-  //   },
-
-  //   title: {
-  //     text: 'Bar series - data sorting',
-  //   },
-
-  //   yAxis: {
-  //     title: {
-  //       text: '',
-  //     },
-  //   },
-
-  //   xAxis: {
-  //     type: 'category',
-  //     min: 0,
-  //     labels: {
-  //       // animate: false
-  //     },
-  //   },
-
-  //   legend: {
-  //     enabled: false,
-  //   },
-
-  //   series: [
-  //     {
-  //       type: 'line',
-  //       zoneAxis: 'x',
-  //       zones: [
-  //         {
-  //           value: 2,
-  //           color: 'red',
-  //         },
-  //       ],
-  //       dataLabels: {
-  //         enabled: true,
-  //         format: '{y:,.2f}',
-  //       },
-  //       data: [
-  //         ['hello', 1],
-  //         ['heddllo', 5],
-  //         ['heldsalo', 2],
-  //         ['heldsadsalo', 4],
-  //       ],
-  //     },
-  //   ],
-  // };
   constructor(private data: DataService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -195,25 +134,25 @@ export class HomeComponent implements OnInit {
   }
   handelResponse(response: any) {
     this.allData = response;
-    console.log(this.allData);
+    // console.log(this.allData);
     this.ListOfCountries = [
       ...new Set(this.allData.map((item: DataModel) => item.country)),
     ];
-    console.log(this.ListOfCountries);
+    // console.log(this.ListOfCountries);
     this.ListOfCamp = [
       ...new Set(this.allData.map((item: DataModel) => item.camp)),
     ];
-    console.log(this.ListOfCamp);
+    // console.log(this.ListOfCamp);
     this.ListOfSchool = [
       ...new Set(this.allData.map((item: DataModel) => item.school)),
     ];
-    console.log(this.ListOfSchool);
+    // console.log(this.ListOfSchool);
     this.loading = false;
   }
   changeFilter() {
     this.getFilteredData(this.filter.value);
-    // this.initChart();
   }
+
   getFilteredData(value: any) {
     this.filteredData = this.allData;
     if (value.country) {
@@ -231,7 +170,7 @@ export class HomeComponent implements OnInit {
         (item: DataModel) => item.school === value.school
       );
     }
-    console.log(this.filteredData);
+    // console.log(this.filteredData);
     this.init();
     this.getChartData(this.filteredData);
   }
@@ -247,36 +186,9 @@ export class HomeComponent implements OnInit {
         }
         console.log(data);
         this.addSerie(this.ListOfSchool[i], data);
-        this.chart.addPoint(0);
-        this.removePoint(0);
 
-        // if (this.chart) {
-        //   this.addSerie(this.ListOfSchool[i].school, data);
-        //   this.chart.addPoint(0)
-        // } else {
-        //   this.init();
-        // }
       }
     }
-    // Highcharts.chart('container', this.chartOptions);
-    // let chart = new Highcharts.Chart({
-    //   chart: {
-    //     type: 'line',
-    //   },
-    //   title: {
-    //     text: 'Linechart',
-    //   },
-    //   credits: {
-    //     enabled: false,
-    //   },
-    //   series: [
-    //     {
-    //       name: 'Line 1',
-    //       data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    //     },
-    //   ],
-    // });
 
-    // this.chart = chart;
   }
 }
