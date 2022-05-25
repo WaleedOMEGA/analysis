@@ -18,35 +18,32 @@ export class HomeComponent implements OnInit {
   filter: FormGroup = new FormGroup({});
   loading: boolean = true;
   filteredData = [];
-  chart: Chart=new Chart;
+  chart: Chart = new Chart();
+  chartData = [];
   addPoint() {
-    if (this.chart) {
-      this.chart.addPoint(Math.floor(Math.random() * 10));
-    } else {
-      alert('init chart, first!');
-    }
+    // if (this.chart) {
+    //   this.chart.addPoint(Math.floor(Math.random() * 10));
+    // } else {
+    //   alert('init chart, first!');
+    // }
   }
 
-  addSerie() {
-    this.chart.addSeries({
-      name: 'Line ' + Math.floor(Math.random() * 10),
-      type: 'line',
-      data: [
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-      ],
-    },false,false);
+  addSerie(name: string, data: (string | number)[][]) {
+    console.log(name,data)
+    this.chart.addSeries(
+      {
+        name,
+        type: 'line',
+        data,
+      color: 'red'
+      },
+      false,
+      false
+    );
   }
 
-  removePoint() {
-    this.chart.removePoint(this.chart.ref.series[0].data.length - 1);
+  removePoint(point:number) {
+    this.chart.removePoint(point);
   }
 
   removeSerie() {
@@ -58,25 +55,70 @@ export class HomeComponent implements OnInit {
       chart: {
         type: 'line',
       },
+      yAxis: {
+        tickWidth: 1,
+        tickColor: '#8e9aa0',
+        startOnTick: true,
+        endOnTick: true,
+        lineWidth: 1,
+        //gridLineWidth: 0,
+        lineColor: '#f3f3f1',
+        title: {
+          text: 'No of Lessons',
+        },
+
+        labels: {
+          overflow: 'justify',
+          style: {
+            color: '#1D252D',
+            fontSize: '10px',
+            fontWeight: 'light',
+            fontFamily: 'STC_Forward',
+          },
+        },
+      },
+      xAxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+
+        ],
+        title: {
+          text: 'Months',
+        },
+        tickColor: '#8e9aa0',
+        startOnTick: true,
+        endOnTick: true,
+        lineWidth: 1,
+        //gridLineWidth: 0,
+        lineColor: '#f3f3f1',
+        labels: {
+          step: 1,
+
+          // rotation: 45,
+          padding: 1,
+          style: {
+            color: '#8e9aa0',
+            fontSize: '10px',
+            fontWeight: '500',
+            fontFamily: 'STC_Forward',
+          },
+        },
+      },
       title: {
         text: 'Linechart',
       },
       credits: {
         enabled: false,
       },
-      series: [
-        {
-          name: 'Line 1',
-          type: 'line',
-          data: [1, 2, 3],
-        },
-      ],
+      series: [],
     });
-    chart.addPoint(4);
+    // chart.addPoint(4);
     this.chart = chart;
-    chart.addPoint(5);
+    // chart.addPoint(5);
     setTimeout(() => {
-      chart.addPoint(6);
+      // chart.addPoint(6);
     }, 2000);
 
     chart.ref$.subscribe(console.log);
@@ -170,7 +212,7 @@ export class HomeComponent implements OnInit {
   }
   changeFilter() {
     this.getFilteredData(this.filter.value);
-    this.initChart();
+    // this.initChart();
   }
   getFilteredData(value: any) {
     this.filteredData = this.allData;
@@ -190,8 +232,32 @@ export class HomeComponent implements OnInit {
       );
     }
     console.log(this.filteredData);
+    this.init();
+    this.getChartData(this.filteredData);
   }
-  public initChart() {
+  public getChartData(filteredData: DataModel[]) {
+    for (let i = 0; i < this.ListOfSchool.length; i++) {
+      let school = filteredData.filter(
+        (item) => item.school == this.ListOfSchool[i]
+      );
+      if (school.length) {
+        let data = [];
+        for (let j = 0; j < school.length; j++) {
+          data.push([school[j].month, school[j].lessons]);
+        }
+        console.log(data);
+        this.addSerie(this.ListOfSchool[i], data);
+        this.chart.addPoint(0);
+        this.removePoint(0);
+
+        // if (this.chart) {
+        //   this.addSerie(this.ListOfSchool[i].school, data);
+        //   this.chart.addPoint(0)
+        // } else {
+        //   this.init();
+        // }
+      }
+    }
     // Highcharts.chart('container', this.chartOptions);
     // let chart = new Highcharts.Chart({
     //   chart: {

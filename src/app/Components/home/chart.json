@@ -1,0 +1,168 @@
+ {
+      chart: {
+        type: this.type,
+        //ignoreHiddenSeries: true,
+        scrollablePlotArea: {
+          //minWidth: 1000,
+          scrollPositionX: 0
+        }
+      },
+      title: {
+        text: null
+      },
+      yAxis: {
+        tickWidth: 1,
+        tickColor: '#8e9aa0',
+        startOnTick: true,
+        endOnTick: true,
+        lineWidth: 1,
+        //gridLineWidth: 0,
+        lineColor: '#f3f3f1',
+        title: {
+          text: 'Number of Meetings'
+        },
+
+        labels: {
+          overflow: 'justify',
+          style: {
+            color: '#1D252D',
+            fontSize: '10px',
+            fontWeight: 'light',
+            fontFamily: 'STC_Forward'
+          }
+        }
+      },
+      xAxis: {
+        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        title: {
+          text: "Months"
+        },
+        tickColor: '#8e9aa0',
+        startOnTick: true,
+        endOnTick: true,
+        lineWidth: 1,
+        //gridLineWidth: 0,
+        lineColor: '#f3f3f1',
+        labels: {
+          step: 1,
+
+          // rotation: 45,
+          padding: 5,
+          style: {
+            color: '#8e9aa0',
+            fontSize: '10px',
+            fontWeight: '500',
+            fontFamily: 'STC_Forward'
+          }
+        },
+      },
+      legend: {
+        symbolHeight: .001,
+        symbolWidth: .001,
+        symbolRadius: .001,
+        floating: true,
+        useHTML: true,
+        labelFormatter: function () {
+          return `<div class="legend-wrapper">
+                        <div class="circle" style="background: ${this.options.color}"></div>
+                        <div class="label font-9 text-color-dark-gray"> ${this.options.name} </div>
+                 </div>`;
+        }
+      },
+      tooltip: {
+        useHTML: true,
+        headerFormat: '',
+        pointFormat:
+          `<div class="tooltip-chart">
+                <span class="circle " style="display:inline-block;width:9px; height:9px; background-color: {point.color}">
+                </span><span class="font-9 text-color-dark-gray">{point.y}</span>
+          </div>`
+      },
+      plotOptions: {
+        column: {
+          stacking : this.stacking,
+          pointPadding: 0.2,
+          borderWidth: 0,
+          pointWidth: this.pointWidth,
+          dataLabels: {
+            //  enabled: true
+          }
+        },
+        series: {
+          events: {
+            legendItemClick: function (e) {
+              e.preventDefault();
+            }
+          }
+        }
+      },
+      series: this.series
+    };
+  }
+}
+[
+  {
+    "id": "620af3a468e4b2e765e7c9e7",
+    "month": "Feb",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 140
+  },
+  {
+    "id": "620af3a40cc037c3899c6292",
+    "month": "Jun",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 100
+  },
+  {
+    "id": "620af3a478d1b8d1719bc822",
+    "month": "Aug",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 110
+  },
+  {
+    "id": "620af3a4407a5cf84b02f54b",
+    "month": "Apr",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 15
+  },
+  {
+    "id": "620af3a49d624244edf9af3c",
+    "month": "Aug",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 235
+  },
+  {
+    "id": "620af3a43e204c27a42faec7",
+    "month": "Jan",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 215
+  },
+  {
+    "id": "620af3a42940d51d0c87811d",
+    "month": "Apr",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 90
+  },
+  {
+    "id": "620af3a46549394505ced3f0",
+    "month": "Nov",
+    "camp": "Omaka",
+    "country": "Egypt",
+    "school": "Burke High School",
+    "lessons": 140
+  }
+]

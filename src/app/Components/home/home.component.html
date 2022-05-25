@@ -1,5 +1,5 @@
-<div *ngIf="loading" class="container" style="justify-content: center;align-items: center;">
-<mat-spinner  [diameter]="400"></mat-spinner>
+<div *ngIf="loading" class="container d-flex align-items-center justify-content-center h-100" >
+<mat-spinner  [diameter]="100"></mat-spinner>
 </div>
 
 
@@ -45,11 +45,11 @@
     be clicked to display more information.
   </p>
 </figure> -->
-<button (click)="init()">Init</button>
-<button (click)="addSerie()">Add Serie</button>
+<!-- <button (click)="init()">Init</button> -->
+<!-- <button (click)="addSerie('',[])">Add Serie</button> -->
 <button (click)="removeSerie()">Remove Serie</button>
 <button (click)="addPoint()">Add Point</button>
-<button (click)="removePoint()">Remove Point</button>
+<button (click)="removePoint(0)">Remove Point</button>
 <div [chart]="chart"></div>
 </div>
 
