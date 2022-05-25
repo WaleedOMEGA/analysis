@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   loading: boolean = true;
   filteredData = [];
   chart: Chart = new Chart();
-  chartData = [];
+  chartData: { name: string, lessons: number []}[] = [];
 
 
   addSerie(name: string, data: (string | number)[][]) {
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   init() {
-    let chart = new Chart({
+    new Chart({
       chart: {
         type: 'line',
       },
@@ -185,6 +185,7 @@ export class HomeComponent implements OnInit {
           data.push([school[j].month, school[j].lessons]);
         }
         console.log(data);
+        // this.chartData.push({name:this.ListOfSchool[i],lessons:data.reduce((a,b)=>a+b[1],0)});
         this.addSerie(this.ListOfSchool[i], data);
 
       }
