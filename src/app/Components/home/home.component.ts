@@ -19,7 +19,8 @@ export class HomeComponent implements OnInit {
   loading: boolean = true;
   filteredData = [];
   chart: Chart = new Chart();
-  chartData: { name: string, lessons: number []}[] = [];
+  chartData: { name: string, lessons: number }[] = [];
+  totalLessons: number = 0;
 months: string[] = [
           'Jan',
           'Feb',
@@ -207,7 +208,10 @@ months: string[] = [
             data.push([this.months[j], 0]);
           }
         }
-        console.log(data)
+
+        this.chartData.push({ name: this.ListOfSchool[i], lessons: data.reduce((a, b) => Number(a) + Number(b[1]), 0) });
+        this.totalLessons=this.chartData.reduce((a, b) => Number(a) + Number(b.lessons), 0);
+        console.log(this.chartData,this.totalLessons);
         // for (let j = 0; j < school.length; j++) {
 
         //   data.push([school[j].month, school[j].lessons]);
