@@ -20,7 +20,20 @@ export class HomeComponent implements OnInit {
   filteredData = [];
   chart: Chart = new Chart();
   chartData: { name: string, lessons: number []}[] = [];
-
+months: string[] = [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ]
 
   addSerie(name: string, data: (string | number)[][]) {
     // console.log(name,data)
@@ -32,8 +45,9 @@ export class HomeComponent implements OnInit {
       // color: 'red'
       },
       true,
-      true
+      false
     );
+    this.chart.ref$.subscribe(console.log);
   }
 
 
@@ -43,9 +57,11 @@ export class HomeComponent implements OnInit {
   }
 
   init() {
-    new Chart({
+    this.chart = new Chart({
       chart: {
         type: 'line',
+        colorCount: 16,
+        marginTop:100,
       },
       yAxis: {
         tickWidth: 1,
@@ -107,14 +123,14 @@ export class HomeComponent implements OnInit {
         },
       },
       title: {
-        text: 'Analysis Chart',
+        text: undefined,
       },
       credits: {
         enabled: false,
       },
       series: [],
     });
-    // chart.ref$.subscribe(console.log);
+
   }
 
   constructor(private data: DataService, private fb: FormBuilder) {}
@@ -126,6 +142,7 @@ export class HomeComponent implements OnInit {
       camp: [''],
       school: [''],
     });
+    this.init()
   }
   getAllData() {
     this.data.getData().subscribe({
@@ -180,11 +197,22 @@ export class HomeComponent implements OnInit {
         (item) => item.school == this.ListOfSchool[i]
       );
       if (school.length) {
+
         let data = [];
-        for (let j = 0; j < school.length; j++) {
-          data.push([school[j].month, school[j].lessons]);
+        for (let j = 0; j < this.months.length; j++) {
+          let month = school.filter((item) => item.month == this.months[j]);
+          if (month.length) {
+            data.push([month[0].month, month[0].lessons]);
+          } else {
+            data.push([this.months[j], 0]);
+          }
         }
-        console.log(data);
+        console.log(data)
+        // for (let j = 0; j < school.length; j++) {
+
+        //   data.push([school[j].month, school[j].lessons]);
+        // }
+        // console.log(data);
         // this.chartData.push({name:this.ListOfSchool[i],lessons:data.reduce((a,b)=>a+b[1],0)});
         this.addSerie(this.ListOfSchool[i], data);
 
