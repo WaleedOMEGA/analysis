@@ -4,6 +4,7 @@ import { DataService } from './../../Services/data.service';
 import { DataModel } from './../../Models/data.model';
 import * as Highcharts from 'highcharts';
 import { Chart } from 'angular-highcharts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -48,14 +49,11 @@ export class HomeComponent implements OnInit {
       true,
       false
     );
-    this.chart.ref$.subscribe(console.log);
-  }
-
-  removeSerie() {
-    this.chart.removeSeries(this.chart.ref.series.length - 1);
+    // this.chart.ref$.subscribe(console.log);
   }
 
   init() {
+    let self = this;
     this.chart = new Chart({
       chart: {
         type: 'line',
@@ -127,11 +125,31 @@ export class HomeComponent implements OnInit {
       credits: {
         enabled: false,
       },
+      plotOptions: {
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                self.setItem(
+                  this.options.name,
+                  this.series.name,
+                  this.options.y
+                );
+              },
+            },
+          },
+        },
+      },
       series: [],
     });
   }
 
-  constructor(private data: DataService, private fb: FormBuilder) {}
+  constructor(
+    public router: Router,
+    private data: DataService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.getAllData();
@@ -141,6 +159,16 @@ export class HomeComponent implements OnInit {
       school: [''],
     });
     this.init();
+    
+    if (this.data.getFilter()) {
+    
+       this.filter.setValue(this.data.getFilter().value) 
+      
+      this.changeFilter();
+  
+    
+    }
+   
   }
   getAllData() {
     this.data.getData().subscribe({
@@ -165,10 +193,13 @@ export class HomeComponent implements OnInit {
     this.loading = false;
   }
   changeFilter() {
+    // console.log(this.filter.value);
     this.getFilteredData(this.filter.value);
+    this.data.setFilter(this.filter)
   }
 
   getFilteredData(value: any) {
+    console.log(this.allData)
     this.filteredData = this.allData;
     if (value.country) {
       this.filteredData = this.filteredData.filter(
@@ -185,7 +216,6 @@ export class HomeComponent implements OnInit {
         (item: DataModel) => item.school === value.school
       );
     }
-    // console.log(this.filteredData);
     this.init();
     this.getChartData(this.filteredData);
   }
@@ -213,26 +243,25 @@ export class HomeComponent implements OnInit {
           (a, b) => Number(a) + Number(b.lessons),
           0
         );
-        console.log(this.chartData, this.totalLessons);
-        // for (let j = 0; j < school.length; j++) {
-
-        //   data.push([school[j].month, school[j].lessons]);
-        // }
-        // console.log(data);
-        // this.chartData.push({name:this.ListOfSchool[i],lessons:data.reduce((a,b)=>a+b[1],0)});
         this.addSerie(this.ListOfSchool[i], data);
       }
     }
   }
   toggle(index: number) {
-    this.chart.ref.series[index].setVisible(!this.chart.ref.series[index].visible, true);
-    console.log(this.chart.ref.series[index].visible);
-    // this.chart.ref.series.forEach((serie) => {
-    //   if (serie.name === name) {
-    //     serie.setVisible(!serie.visible, true);
-    //   }
-    //   console.log(this.chart.ref.series)
-    // });
-    // this.chart.ref.redraw();
-  };
+    this.chart.ref.series[index].setVisible(
+      !this.chart.ref.series[index].visible,
+      true
+    );
+  }
+  setItem(month: any, school: any, lessons: any) {
+    let item = {
+      month,
+      camp: this.filter.value.camp ? this.filter.value.camp : null,
+      country: this.filter.value.country ? this.filter.value.country : null,
+      school,
+      lessons,
+    };
+    this.data.setItem(item);
+    this.router.navigate(['item']);
+  }
 }

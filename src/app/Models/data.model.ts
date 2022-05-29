@@ -1,6 +1,6 @@
 export class DataModel
 {
-  id: string='';
+  id?: string='';
   month: string='';
   camp: string='';
   country: string='';

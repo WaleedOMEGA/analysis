@@ -13,8 +13,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChartModule } from 'angular-highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
   import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ItemComponent } from './Components/item/item.component';
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, ItemComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

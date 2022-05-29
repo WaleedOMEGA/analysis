@@ -7,10 +7,26 @@ import { DataModel } from './../Models/data.model';
   providedIn: 'root'
 })
 export class DataService {
-
-  constructor(private http: HttpClient) { }
+item: DataModel={month:'',camp:'',country:'',school:'',lessons:0};
+  filter: any;
+  constructor(private http: HttpClient) { 
+    
+  }
 
   getData(): Observable<DataModel[]> {
     return this.http.get<DataModel[]>('../../assets/data.json');
+  }
+  setItem(item:any) {
+    this.item = item;
+    
+  }
+  getItem() {
+    return this.item;
+  }
+  setFilter(filter: any) { 
+    this.filter = filter;
+  }
+  getFilter() {
+    return this.filter;
   }
 }
