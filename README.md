@@ -3,7 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
 The challenge is to implement an analytics dashboard like this one with the description below:
 
-![design](./chart-design.jpg)
+![design](./src/assets/chart-design.jpg)
 
 ## Development server
 
