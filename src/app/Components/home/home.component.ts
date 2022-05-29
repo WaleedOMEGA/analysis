@@ -19,22 +19,22 @@ export class HomeComponent implements OnInit {
   loading: boolean = true;
   filteredData = [];
   chart: Chart = new Chart();
-  chartData: { name: string, lessons: number }[] = [];
+  chartData: { name: string; lessons: number }[] = [];
   totalLessons: number = 0;
-months: string[] = [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ]
+  months: string[] = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   addSerie(name: string, data: (string | number)[][]) {
     // console.log(name,data)
@@ -43,15 +43,13 @@ months: string[] = [
         name,
         type: 'line',
         data,
-      // color: 'red'
+        // color: 'red'
       },
       true,
       false
     );
     this.chart.ref$.subscribe(console.log);
   }
-
-
 
   removeSerie() {
     this.chart.removeSeries(this.chart.ref.series.length - 1);
@@ -62,7 +60,7 @@ months: string[] = [
       chart: {
         type: 'line',
         colorCount: 16,
-        marginTop:100,
+        marginTop: 100,
       },
       yAxis: {
         tickWidth: 1,
@@ -131,7 +129,6 @@ months: string[] = [
       },
       series: [],
     });
-
   }
 
   constructor(private data: DataService, private fb: FormBuilder) {}
@@ -143,7 +140,7 @@ months: string[] = [
       camp: [''],
       school: [''],
     });
-    this.init()
+    this.init();
   }
   getAllData() {
     this.data.getData().subscribe({
@@ -198,7 +195,6 @@ months: string[] = [
         (item) => item.school == this.ListOfSchool[i]
       );
       if (school.length) {
-
         let data = [];
         for (let j = 0; j < this.months.length; j++) {
           let month = school.filter((item) => item.month == this.months[j]);
@@ -209,9 +205,15 @@ months: string[] = [
           }
         }
 
-        this.chartData.push({ name: this.ListOfSchool[i], lessons: data.reduce((a, b) => Number(a) + Number(b[1]), 0) });
-        this.totalLessons=this.chartData.reduce((a, b) => Number(a) + Number(b.lessons), 0);
-        console.log(this.chartData,this.totalLessons);
+        this.chartData.push({
+          name: this.ListOfSchool[i],
+          lessons: data.reduce((a, b) => Number(a) + Number(b[1]), 0),
+        });
+        this.totalLessons = this.chartData.reduce(
+          (a, b) => Number(a) + Number(b.lessons),
+          0
+        );
+        console.log(this.chartData, this.totalLessons);
         // for (let j = 0; j < school.length; j++) {
 
         //   data.push([school[j].month, school[j].lessons]);
@@ -219,9 +221,18 @@ months: string[] = [
         // console.log(data);
         // this.chartData.push({name:this.ListOfSchool[i],lessons:data.reduce((a,b)=>a+b[1],0)});
         this.addSerie(this.ListOfSchool[i], data);
-
       }
     }
-
   }
+  toggle(index: number) {
+    this.chart.ref.series[index].setVisible(!this.chart.ref.series[index].visible, true);
+    console.log(this.chart.ref.series[index].visible);
+    // this.chart.ref.series.forEach((serie) => {
+    //   if (serie.name === name) {
+    //     serie.setVisible(!serie.visible, true);
+    //   }
+    //   console.log(this.chart.ref.series)
+    // });
+    // this.chart.ref.redraw();
+  };
 }

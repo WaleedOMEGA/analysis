@@ -52,7 +52,17 @@
   <div class="col-9">
     <div [chart]="chart"></div>
   </div>
-  <div class="col-3">wwww</div>
+  <div *ngIf="totalLessons" class="col-3 lessons">
+    <h1>{{totalLessons}} Lessons</h1>
+    <h2>in {{filter.value.camp ? filter.value.camp : filter.value.country}}</h2>
+    <div class="wrapper">
+    <div *ngFor="let school of chartData ; let i = index">
+      <h3> <mat-checkbox [checked]="chart.ref.series[i].visible" (change)="toggle(i)" (valueChange)="toggle(i)"> </mat-checkbox> {{school.lessons}} Lessons</h3>
+      <h3>in {{school.name}}</h3>
+    </div>
+    </div>
+
+  </div>
 </div>
 
 

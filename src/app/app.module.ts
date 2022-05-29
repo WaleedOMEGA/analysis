@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChartModule } from 'angular-highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+  import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [
@@ -25,6 +26,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
     ReactiveFormsModule,
     ChartModule,
     HighchartsChartModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent],
