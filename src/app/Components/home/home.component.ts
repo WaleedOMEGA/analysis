@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DataService } from './../../Services/data.service';
 import { DataModel } from './../../Models/data.model';
-import * as Highcharts from 'highcharts';
 import { Chart } from 'angular-highcharts';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,16 +11,25 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  // dropdown data
   ListOfCountries: any[] = [];
-  allData = [];
   ListOfCamp: any[] = [];
   ListOfSchool: any[] = [];
+
+  // all data from api
+  allData = [];
+  // form containes dropdown lists
   filter: FormGroup = new FormGroup({});
+  // loader
   loading: boolean = true;
+  // filter data depend on user select
   filteredData = [];
+  // create new chart
   chart: Chart = new Chart();
+  // data from the current chart
   chartData: { name: string; lessons: number }[] = [];
   totalLessons: number = 0;
+  // list of months
   months: string[] = [
     'Jan',
     'Feb',
@@ -38,23 +45,47 @@ export class HomeComponent implements OnInit {
     'Dec',
   ];
 
-  addSerie(name: string, data: (string | number)[][]) {
+  constructor(
+    public router: Router,
+    private data: DataService,
+    private fb: FormBuilder
+  ) {}
 
+  ngOnInit(): void {
+    // get all data
+    this.getAllData();
+    // initialize form
+    this.filter = this.fb.group({
+      country: [''],
+      camp: [''],
+      school: [''],
+    });
+// configure the chart
+    this.init();
+// set value when come back to home component
+    if (this.data.getFilter()) {
+      this.filter.setValue(this.data.getFilter().value);
+
+      this.changeFilter();
+    }
+  }
+
+  // add new school data to chart
+  addSerie(name: string, data: (string | number)[][]) {
     this.chart.addSeries(
       {
         name,
         type: 'line',
         data,
-        // color: 'red'
       },
       true,
       false
     );
-
   }
-
+// configure the chart
   init() {
     let self = this;
+    // chart options
     this.chart = new Chart({
       chart: {
         type: 'line',
@@ -145,42 +176,15 @@ export class HomeComponent implements OnInit {
       series: [],
     });
   }
-
-  constructor(
-    public router: Router,
-    private data: DataService,
-    private fb: FormBuilder
-  ) {}
-
-  ngOnInit(): void {
-    // debugger;
-    this.getAllData();
-    this.filter = this.fb.group({
-      country: [''],
-      camp: [''],
-      school: [''],
-    });
-    this.init();
-
-    if (this.data.getFilter()) {
-      this.filter.setValue(this.data.getFilter().value);
-
-      this.changeFilter();
-    }
-  }
+  // get all data from api
   getAllData() {
-
-    this.data
-      .getData()
-      .subscribe({
-        next: this.handelResponse.bind(this),
-      });
-
+    this.data.getData().subscribe({
+      next: this.handelResponse.bind(this),
+    });
   }
+  // get the content from dropdown lists
   handelResponse(response: any) {
-
     this.allData = response;
-
 
     this.ListOfCountries = [
       ...new Set(this.allData.map((item: DataModel) => item.country)),
@@ -199,11 +203,12 @@ export class HomeComponent implements OnInit {
 
     this.loading = false;
   }
+  // change filter based on user selction
   changeFilter() {
     this.getFilteredData(this.filter.value);
     this.data.setFilter(this.filter);
   }
-
+// get customized data based on user selection
   getFilteredData(value: any) {
     this.filteredData = this.allData;
     if (value.country) {
@@ -224,6 +229,7 @@ export class HomeComponent implements OnInit {
     this.init();
     this.getChartData(this.filteredData);
   }
+  // group chart data by school
   public getChartData(filteredData: DataModel[]) {
     this.chartData = [];
     for (let i = 0; i < this.ListOfSchool.length; i++) {
@@ -240,7 +246,6 @@ export class HomeComponent implements OnInit {
             data.push([this.months[j], 0]);
           }
         }
-
 
         this.chartData.push({
           name: this.ListOfSchool[i],
@@ -260,12 +265,14 @@ export class HomeComponent implements OnInit {
       }
     }
   }
+  // set visible data for chart
   toggle(index: number) {
     this.chart.ref.series[index].setVisible(
       !this.chart.ref.series[index].visible,
       true
     );
   }
+  // set item details and navigate to item details page
   setItem(month: any, school: any, lessons: any) {
     let item = {
       month,
@@ -277,5 +284,4 @@ export class HomeComponent implements OnInit {
     this.data.setItem(item);
     this.router.navigate(['item']);
   }
-
 }

@@ -2,10 +2,6 @@
 <mat-spinner  [diameter]="100"></mat-spinner>
 </div>
 
-
-
-
-
 <div *ngIf="!loading" class="container">
 <h1 class="text-center">Analysis Chart</h1>
 <h2 class="text-center">Number of Lessons</h2>
@@ -37,16 +33,7 @@
   </mat-select>
 </mat-form-field>
 </form>
-<!-- <highcharts-chart style="display: block;" [Highcharts]="Highcharts" [options]="caseChart"></highcharts-chart> -->
-<!-- <figure class="highcharts-figure">
-  <div id="container"></div>
-  <p class="highcharts-description">
-    Chart showing data loaded dynamically. The individual data points can
-    be clicked to display more information.
-  </p>
-</figure> -->
-<!-- <button (click)="init()">Init</button> -->
-<!-- <button (click)="addSerie('',[])">Add Serie</button> -->
+
 
 <div class="row">
   <div class="col-9">
@@ -57,7 +44,7 @@
     <h2>in {{filter.value.camp ? filter.value.camp : filter.value.country}}</h2>
     <div class="wrapper">
     <div *ngFor="let school of chartData ; let i = index">
-      <h3 *ngIf="chart.ref.series[i]"> <mat-checkbox  [checked]="chart.ref.series[i].visible" (change)="toggle(i)" (valueChange)="toggle(i)"> </mat-checkbox> {{school.lessons}} Lessons</h3>
+      <h3 *ngIf="chart.ref.series[i]"> <mat-checkbox  [checked]="chart.ref.series[i].visible" (change)="toggle(i)"> </mat-checkbox> {{school.lessons}} Lessons</h3>
       <h3 *ngIf="chart.ref.series[i]">in {{school.name}}</h3>
     </div>
     </div>
