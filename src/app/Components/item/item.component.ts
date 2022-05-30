@@ -15,6 +15,5 @@ export class ItemComponent implements OnInit {
   }
   getItem() {
     this.item = this.data.getItem();
-    console.log(this.item);
 }
 }

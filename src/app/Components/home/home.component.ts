@@ -5,6 +5,7 @@ import { DataModel } from './../../Models/data.model';
 import * as Highcharts from 'highcharts';
 import { Chart } from 'angular-highcharts';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
   ];
 
   addSerie(name: string, data: (string | number)[][]) {
-    // console.log(name,data)
+
     this.chart.addSeries(
       {
         name,
@@ -49,7 +50,7 @@ export class HomeComponent implements OnInit {
       true,
       false
     );
-    // this.chart.ref$.subscribe(console.log);
+
   }
 
   init() {
@@ -152,6 +153,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // debugger;
     this.getAllData();
     this.filter = this.fb.group({
       country: [''],
@@ -161,46 +163,48 @@ export class HomeComponent implements OnInit {
     this.init();
 
     if (this.data.getFilter()) {
-
-       this.filter.setValue(this.data.getFilter().value)
+      this.filter.setValue(this.data.getFilter().value);
 
       this.changeFilter();
-
-
     }
-
   }
   getAllData() {
-    this.data.getData().subscribe({
-      next: this.handelResponse.bind(this),
-    });
+
+    this.data
+      .getData()
+      .subscribe({
+        next: this.handelResponse.bind(this),
+      });
+
   }
   handelResponse(response: any) {
+
     this.allData = response;
-    // console.log(this.allData);
+
+
     this.ListOfCountries = [
       ...new Set(this.allData.map((item: DataModel) => item.country)),
     ];
-    // console.log(this.ListOfCountries);
+
     this.ListOfCamp = [
       ...new Set(this.allData.map((item: DataModel) => item.camp)),
     ];
-    // console.log(this.ListOfCamp);
+
     this.ListOfSchool = [
       ...new Set(this.allData.map((item: DataModel) => item.school)),
     ];
-    // console.log(this.ListOfSchool);
+    if (this.data.getFilter()) {
+      this.getFilteredData(this.filter.value);
+    }
+
     this.loading = false;
   }
   changeFilter() {
-    // debugger;
-    // console.log(this.filter.value);
     this.getFilteredData(this.filter.value);
-    this.data.setFilter(this.filter)
+    this.data.setFilter(this.filter);
   }
 
   getFilteredData(value: any) {
-    console.log(this.allData)
     this.filteredData = this.allData;
     if (value.country) {
       this.filteredData = this.filteredData.filter(
@@ -236,7 +240,7 @@ export class HomeComponent implements OnInit {
             data.push([this.months[j], 0]);
           }
         }
-        console.log(data)
+
 
         this.chartData.push({
           name: this.ListOfSchool[i],
@@ -246,13 +250,13 @@ export class HomeComponent implements OnInit {
           (a, b) => Number(a) + Number(b.lessons),
           0
         );
-        console.log(this.chartData,this.totalLessons)
+
         this.addSerie(this.ListOfSchool[i], data);
       } else {
-       this.totalLessons = this.chartData.reduce(
-         (a, b) => Number(a) + Number(b.lessons),
-         0
-       );
+        this.totalLessons = this.chartData.reduce(
+          (a, b) => Number(a) + Number(b.lessons),
+          0
+        );
       }
     }
   }
@@ -273,4 +277,5 @@ export class HomeComponent implements OnInit {
     this.data.setItem(item);
     this.router.navigate(['item']);
   }
+
 }
