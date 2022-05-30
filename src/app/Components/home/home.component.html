@@ -57,8 +57,8 @@
     <h2>in {{filter.value.camp ? filter.value.camp : filter.value.country}}</h2>
     <div class="wrapper">
     <div *ngFor="let school of chartData ; let i = index">
-      <h3> <mat-checkbox [checked]="chart.ref.series[i].visible" (change)="toggle(i)" (valueChange)="toggle(i)"> </mat-checkbox> {{school.lessons}} Lessons</h3>
-      <h3>in {{school.name}}</h3>
+      <h3 *ngIf="chart.ref.series[i]"> <mat-checkbox  [checked]="chart.ref.series[i].visible" (change)="toggle(i)" (valueChange)="toggle(i)"> </mat-checkbox> {{school.lessons}} Lessons</h3>
+      <h3 *ngIf="chart.ref.series[i]">in {{school.name}}</h3>
     </div>
     </div>
 

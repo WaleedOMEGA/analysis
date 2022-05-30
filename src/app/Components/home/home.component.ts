@@ -159,16 +159,16 @@ export class HomeComponent implements OnInit {
       school: [''],
     });
     this.init();
-    
+
     if (this.data.getFilter()) {
-    
-       this.filter.setValue(this.data.getFilter().value) 
-      
+
+       this.filter.setValue(this.data.getFilter().value)
+
       this.changeFilter();
-  
-    
+
+
     }
-   
+
   }
   getAllData() {
     this.data.getData().subscribe({
@@ -193,6 +193,7 @@ export class HomeComponent implements OnInit {
     this.loading = false;
   }
   changeFilter() {
+    // debugger;
     // console.log(this.filter.value);
     this.getFilteredData(this.filter.value);
     this.data.setFilter(this.filter)
@@ -220,6 +221,7 @@ export class HomeComponent implements OnInit {
     this.getChartData(this.filteredData);
   }
   public getChartData(filteredData: DataModel[]) {
+    this.chartData = [];
     for (let i = 0; i < this.ListOfSchool.length; i++) {
       let school = filteredData.filter(
         (item) => item.school == this.ListOfSchool[i]
@@ -234,6 +236,7 @@ export class HomeComponent implements OnInit {
             data.push([this.months[j], 0]);
           }
         }
+        console.log(data)
 
         this.chartData.push({
           name: this.ListOfSchool[i],
@@ -243,7 +246,13 @@ export class HomeComponent implements OnInit {
           (a, b) => Number(a) + Number(b.lessons),
           0
         );
+        console.log(this.chartData,this.totalLessons)
         this.addSerie(this.ListOfSchool[i], data);
+      } else {
+       this.totalLessons = this.chartData.reduce(
+         (a, b) => Number(a) + Number(b.lessons),
+         0
+       );
       }
     }
   }
