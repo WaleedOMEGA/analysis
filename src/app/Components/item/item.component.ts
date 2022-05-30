@@ -13,6 +13,7 @@ export class ItemComponent implements OnInit {
   ngOnInit(): void {
     this.getItem();
   }
+  // get item from home component
   getItem() {
     this.item = this.data.getItem();
 }

@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit {
       next: this.handelResponse.bind(this),
     });
   }
-  // get the content from dropdown lists
+  // get the content for dropdown lists
   handelResponse(response: any) {
     this.allData = response;
 
